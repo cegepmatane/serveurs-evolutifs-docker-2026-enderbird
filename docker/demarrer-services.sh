@@ -25,6 +25,9 @@ if [ ! -f "$cheminFichierTemoin" ]; then
     # Importer la sauvegarde de la base de Cornucopia
     mysql $DB_NAME < $cheminBaseDeDonnees
 
+    # Bug de localhost pas le bon sur le site
+    mysql "$DB_NAME" -e "UPDATE wp_options SET option_value='http://localhost:8080' WHERE option_name IN ('siteurl','home');"
+
     touch "$cheminFichierTemoin"
 fi
 
