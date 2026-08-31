@@ -10,3 +10,10 @@ RUN apt-get update \
     && sed -ri 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Script de démarrage
+COPY demarrer-services.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/demarrer-services.sh
+
+# Préparer le dossier de données MariaDB
+RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
