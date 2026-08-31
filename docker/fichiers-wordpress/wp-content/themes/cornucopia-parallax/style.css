@@ -1,0 +1,432 @@
+/*
+Theme Name: Cornucopia Parallax
+Theme URI: https://cornucopia.projet.autos
+Description: Thème prairie à la Farmville pour la ferme Cornucopia de Flora et Hazel. Scène d'en-tête vectorielle avec parallax (soleil, nuages, collines, grange, clôture), bandeau de récoltes défilant, cartes blanches rebondissantes et pied de page en bois. Issu de la maquette prairie-parallax.
+Author: Flora et Hazel (ferme Cornucopia)
+Version: 1.4
+Text Domain: cornucopia-parallax
+*/
+
+/* ===================== FONTES LOCALES ===================== */
+@font-face {
+    font-family: 'Bungee';
+    src: url('fonts/bungee.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Lilita One';
+    src: url('fonts/lilita-one.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Nunito';
+    src: url('fonts/nunito-400.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Nunito';
+    src: url('fonts/nunito-700.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ===================== VARIABLES ===================== */
+:root {
+    --ciel: #6EC9F5;
+    --ciel-haut: #4FB3EE;
+    --prairie: #58C127;
+    --prairie-foncee: #46A31E;
+    --prairie-sombre: #2F7A12;
+    --soleil: #FFD23F;
+    --carotte: #FF9500;
+    --tomate: #FF3B30;
+    --bois: #8B5A2B;
+    --bois-fonce: #5C3A18;
+    --creme: #FFFDF5;
+    --encre: #223018;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Nunito', sans-serif;
+    color: var(--encre);
+    background: var(--prairie);
+    overflow-x: hidden;
+}
+
+/* ===================== EN-TETE SCENE PARALLAX ===================== */
+#scene {
+    position: relative;
+    height: 92vh;
+    min-height: 560px;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--ciel-haut) 0%, var(--ciel) 55%, #A8E063 100%);
+}
+/* Scène raccourcie hors de l'accueil : l'article prend la vedette */
+body.single #scene, body.page #scene, body.archive #scene,
+body.search #scene, body.error404 #scene {
+    height: 48vh;
+    min-height: 400px;
+}
+.couche { position: absolute; inset: 0; will-change: transform; }
+.couche svg { position: absolute; bottom: 0; left: 0; width: 100%; height: auto; display: block; }
+#couche-soleil svg { top: 4vh; left: 63vw; width: 220px; height: 220px; bottom: auto; }
+body.single #couche-soleil svg, body.page #couche-soleil svg { width: 140px; height: 140px; }
+#soleil-rayons { animation: tournerLentement 40s linear infinite; transform-origin: center; }
+/* Carottes ballerines : elles pivotent depuis leur base plantee,
+   le JS module l'angle au defilement */
+.carotte-ballerine {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    transition: transform 0.1s linear;
+    will-change: transform;
+}
+@keyframes tournerLentement { to { transform: rotate(360deg); } }
+.nuage { position: absolute; animation: deriverNuage linear infinite; }
+@keyframes deriverNuage {
+    from { transform: translateX(-30vw); }
+    to { transform: translateX(130vw); }
+}
+#titre-scene { position: relative; z-index: 10; text-align: center; padding-top: 13vh; }
+body.single #titre-scene, body.page #titre-scene, body.archive #titre-scene,
+body.search #titre-scene, body.error404 #titre-scene { padding-top: 8vh; }
+#titre-principal {
+    font-family: 'Bungee', cursive;
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    color: var(--creme);
+    text-shadow: 0 4px 0 var(--bois-fonce), 0 8px 0 rgba(0,0,0,0.18), 0 14px 30px rgba(0,0,0,0.35);
+    letter-spacing: 2px;
+}
+body.single #titre-principal, body.page #titre-principal { font-size: clamp(1.9rem, 4.5vw, 3rem); }
+#titre-principal a { color: inherit; text-decoration: none; }
+#titre-sous-titre {
+    display: inline-block;
+    margin-top: 1.1rem;
+    font-family: 'Lilita One', cursive;
+    font-size: clamp(1.05rem, 2.4vw, 1.5rem);
+    color: var(--bois-fonce);
+    background: var(--soleil);
+    padding: 0.55rem 1.6rem;
+    border-radius: 999px;
+    border: 4px solid var(--creme);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.22);
+    transform: rotate(-2deg);
+}
+body.single #titre-sous-titre, body.page #titre-sous-titre { font-size: 0.95rem; }
+#action-descendre {
+    display: inline-block;
+    margin-top: 2.2rem;
+    font-family: 'Lilita One', cursive;
+    font-size: 1.15rem;
+    color: #fff;
+    background: linear-gradient(180deg, #4CD964 0%, #2FA845 100%);
+    padding: 0.9rem 2.4rem;
+    border-radius: 999px;
+    border: 4px solid #fff;
+    box-shadow: 0 7px 0 var(--prairie-sombre), 0 12px 20px rgba(0,0,0,0.3);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s;
+}
+body.single #action-descendre, body.page #action-descendre,
+body.archive #action-descendre, body.search #action-descendre,
+body.error404 #action-descendre {
+    margin-top: 1.2rem;
+    font-size: 0.95rem;
+    padding: 0.65rem 1.7rem;
+}
+#action-descendre:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 12px 0 var(--prairie-sombre), 0 18px 28px rgba(0,0,0,0.35); }
+#action-descendre:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--prairie-sombre); }
+
+/* ===================== BANDEAU RECOLTE ===================== */
+#bandeau-recolte {
+    background: var(--prairie-foncee);
+    padding: 0.8rem 0;
+    overflow: hidden;
+    border-top: 6px solid var(--prairie-sombre);
+    border-bottom: 6px solid var(--prairie-sombre);
+}
+#bandeau-defilement {
+    display: flex;
+    gap: 3.5rem;
+    white-space: nowrap;
+    font-family: 'Lilita One', cursive;
+    font-size: 1.15rem;
+    color: var(--creme);
+    animation: defilerBandeau 66s linear infinite;
+    width: max-content;
+}
+@keyframes defilerBandeau { to { transform: translateX(-50%); } }
+
+/* ===================== SECTIONS ===================== */
+.section { padding: 4.5rem 1.5rem; }
+.section-boite { max-width: 1080px; margin: 0 auto; }
+.section-titre {
+    font-family: 'Lilita One', cursive;
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+    color: var(--creme);
+    text-align: center;
+    text-shadow: 0 3px 0 var(--prairie-sombre), 0 6px 12px rgba(0,0,0,0.25);
+    margin-bottom: 0.6rem;
+}
+.section-sous-titre {
+    text-align: center;
+    color: #EAFBDD;
+    font-size: 1.12rem;
+    font-weight: 700;
+    margin-bottom: 2.6rem;
+}
+
+/* ===================== CARTES DES NOUVELLES ===================== */
+#nouvelles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+/* Une seule nouvelle : carte centrée, pas étirée pleine largeur */
+#nouvelles.nouvelles-solo { grid-template-columns: minmax(280px, 640px); justify-content: center; }
+.nouvelle {
+    background: var(--creme);
+    border-radius: 26px;
+    padding: 1.6rem;
+    box-shadow: 0 10px 0 rgba(0,0,0,0.16), 0 18px 30px rgba(0,0,0,0.18);
+    transform: translateY(40px);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s, box-shadow 0.3s;
+}
+.nouvelle.visible { transform: translateY(0); opacity: 1; }
+.nouvelle:hover { box-shadow: 0 14px 0 rgba(0,0,0,0.16), 0 26px 40px rgba(0,0,0,0.22); transform: translateY(-6px); }
+.nouvelle-vignette {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 5px solid var(--prairie-foncee);
+    background: #E8F7EC;
+}
+.nouvelle-vignette img, .nouvelle-vignette svg { display: block; width: 100%; height: auto; }
+.nouvelle-etiquette {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: 'Lilita One', cursive;
+    font-size: 0.85rem;
+    color: #fff;
+    background: var(--carotte);
+    padding: 0.25rem 0.9rem;
+    border-radius: 999px;
+    box-shadow: 0 3px 0 #B26400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+.nouvelle-titre {
+    font-family: 'Lilita One', cursive;
+    font-size: 1.45rem;
+    margin: 0.7rem 0 0.5rem;
+}
+.nouvelle-titre a { color: var(--bois-fonce); text-decoration: none; transition: color 0.2s; }
+.nouvelle-titre a:hover { color: var(--carotte); }
+.nouvelle-texte { font-size: 1rem; line-height: 1.65; }
+.nouvelle-texte p { margin-bottom: 0.6rem; }
+.nouvelle-date { display: block; margin-top: 0.8rem; font-weight: 800; font-size: 0.85rem; color: var(--prairie-sombre); text-transform: uppercase; }
+.nouvelle-action {
+    display: inline-block;
+    margin-top: 0.6rem;
+    font-weight: 800;
+    color: var(--prairie-sombre);
+    text-decoration: none;
+    border-bottom: 3px solid var(--soleil);
+    transition: color 0.2s;
+}
+.nouvelle-action:hover { color: var(--carotte); }
+
+/* ===================== ABONNEMENTS (section en dur sur l'accueil) ===================== */
+#section-abonnements { background: var(--prairie-foncee); position: relative; }
+#abonnements {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+}
+.abonnement {
+    background: var(--creme);
+    border-radius: 26px;
+    padding: 2rem 1.6rem;
+    text-align: center;
+    box-shadow: 0 10px 0 rgba(0,0,0,0.2), 0 18px 30px rgba(0,0,0,0.2);
+    position: relative;
+    transform: translateY(40px);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s;
+}
+.abonnement.visible { transform: translateY(0); opacity: 1; }
+.abonnement-vedette { outline: 5px solid var(--soleil); outline-offset: -5px; }
+.abonnement-medaille {
+    position: absolute;
+    top: -18px;
+    right: 18px;
+    font-family: 'Lilita One', cursive;
+    background: var(--soleil);
+    color: var(--bois-fonce);
+    padding: 0.35rem 1rem;
+    border-radius: 999px;
+    border: 3px solid var(--creme);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    transform: rotate(4deg);
+    font-size: 0.9rem;
+}
+.abonnement-nom { font-family: 'Lilita One', cursive; font-size: 1.5rem; color: var(--bois-fonce); }
+.abonnement-prix {
+    font-family: 'Bungee', cursive;
+    font-size: 2.4rem;
+    color: var(--prairie-sombre);
+    margin: 0.7rem 0;
+}
+.abonnement-prix small { font-size: 1rem; font-family: 'Nunito', sans-serif; font-weight: 800; }
+.abonnement-detail { list-style: none; margin: 1rem 0 1.5rem; }
+.abonnement-detail li { padding: 0.3rem 0; font-weight: 700; }
+.abonnement-detail li::before { content: "✔ "; color: var(--prairie-foncee); }
+.abonnement-action {
+    display: inline-block;
+    font-family: 'Lilita One', cursive;
+    font-size: 1.05rem;
+    color: #fff;
+    background: linear-gradient(180deg, #FFB340 0%, var(--carotte) 100%);
+    padding: 0.8rem 2rem;
+    border-radius: 999px;
+    border: 4px solid #fff;
+    box-shadow: 0 6px 0 #B26400, 0 10px 16px rgba(0,0,0,0.25);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s;
+}
+.abonnement-action:hover { transform: translateY(-4px) scale(1.04); box-shadow: 0 10px 0 #B26400, 0 16px 24px rgba(0,0,0,0.3); }
+.abonnement-action:active { transform: translateY(3px); box-shadow: 0 2px 0 #B26400; }
+
+/* ===================== PAGINATION ===================== */
+.pagination { margin-top: 3rem; text-align: center; }
+.pagination .nav-links { display: inline-flex; gap: 0.6rem; align-items: center; }
+.pagination .page-numbers {
+    font-family: 'Lilita One', cursive;
+    color: var(--bois-fonce);
+    background: var(--creme);
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    text-decoration: none;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.pagination .page-numbers:hover { transform: translateY(-3px); }
+.pagination .page-numbers.current { background: var(--soleil); }
+
+/* ===================== ARTICLE SEUL ET PAGES ===================== */
+#article-boite {
+    max-width: 860px;
+    margin: 2.6rem auto 0;
+    position: relative;
+    z-index: 20;
+    background: var(--creme);
+    border-radius: 30px;
+    padding: clamp(1.6rem, 4vw, 3.2rem);
+    box-shadow: 0 12px 0 rgba(0,0,0,0.18), 0 22px 36px rgba(0,0,0,0.22);
+}
+#article-entete { text-align: center; margin-bottom: 2rem; }
+#article-titre {
+    font-family: 'Lilita One', cursive;
+    font-size: clamp(1.8rem, 4.2vw, 2.7rem);
+    color: var(--bois-fonce);
+    line-height: 1.15;
+}
+#article-meta { margin-top: 0.9rem; font-weight: 800; color: var(--prairie-sombre); }
+#article-meta .nouvelle-etiquette { margin: 0 0 0 0.7rem; }
+#article-contenu { font-size: 1.08rem; line-height: 1.75; }
+#article-contenu p { margin-bottom: 1.1rem; }
+#article-contenu h2, #article-contenu h3 {
+    font-family: 'Lilita One', cursive;
+    color: var(--bois-fonce);
+    margin: 1.6rem 0 0.7rem;
+}
+#article-contenu img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 18px;
+    border: 5px solid var(--prairie-foncee);
+    box-shadow: 0 8px 0 rgba(0,0,0,0.14);
+}
+#article-contenu figure { margin: 1.4rem 0; }
+#article-contenu figure.alignwide, #article-contenu figure.alignfull { margin-left: 0; margin-right: 0; }
+#article-contenu a { color: var(--prairie-sombre); font-weight: 800; }
+#article-contenu a:hover { color: var(--carotte); }
+#article-contenu ul, #article-contenu ol { margin: 0 0 1.1rem 1.4rem; }
+#article-contenu blockquote {
+    background: #E8F7EC;
+    border-left: 6px solid var(--prairie-foncee);
+    border-radius: 0 14px 14px 0;
+    padding: 1rem 1.3rem;
+    margin-bottom: 1.1rem;
+}
+#article-retour { text-align: center; margin-top: 2.4rem; }
+
+/* ===================== PIED DE PAGE ===================== */
+#pied-de-page {
+    background: var(--bois-fonce);
+    color: var(--creme);
+    text-align: center;
+    padding: 3rem 1.5rem 2.2rem;
+    position: relative;
+    margin-top: 4.5rem;
+}
+#pied-de-page > svg { position: absolute; top: -44px; left: 0; width: 100%; height: 46px; display: block; }
+#pied-titre { font-family: 'Bungee', cursive; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--soleil); }
+#pied-titre a { color: inherit; text-decoration: none; }
+#pied-texte { font-weight: 700; opacity: 0.9; }
+
+/* ===================== BARRE ADMIN WORDPRESS ===================== */
+body.admin-bar #scene { height: calc(92vh - 32px); }
+body.admin-bar.single #scene, body.admin-bar.page #scene { height: calc(44vh - 32px); }
+
+/* ===================== GRANDS ECRANS ===================== */
+/* Le decor de la scene est en vh/vw : il grandit avec l'ecran. Les textes
+   plafonnes en rem restaient figes et devenaient minuscules sur grand ecran.
+   Au-dela de 1900px, tout passe en vw/em avec des coefficients cales pour
+   donner exactement le meme rendu qu'aujourd'hui a 1900px, puis suivre le
+   decor au-dela. */
+@media (min-width: 1900px) {
+    #titre-principal {
+        font-size: 4.38vw;
+        text-shadow: 0 0.05em 0 var(--bois-fonce), 0 0.1em 0 rgba(0,0,0,0.18), 0 0.17em 0.36em rgba(0,0,0,0.35);
+    }
+    body.single #titre-principal, body.page #titre-principal { font-size: 2.53vw; }
+    #titre-sous-titre {
+        font-size: 1.26vw;
+        margin-top: 0.73em;
+        padding: 0.37em 1.07em;
+        border-width: 0.17em;
+        box-shadow: 0 0.25em 0 rgba(0,0,0,0.22);
+    }
+    body.single #titre-sous-titre, body.page #titre-sous-titre { font-size: 0.8vw; }
+    #action-descendre {
+        font-size: 0.97vw;
+        margin-top: 1.91em;
+        padding: 0.78em 2.09em;
+        border-width: 0.22em;
+        box-shadow: 0 0.38em 0 var(--prairie-sombre), 0 0.65em 1.09em rgba(0,0,0,0.3);
+    }
+    body.single #action-descendre, body.page #action-descendre,
+    body.archive #action-descendre, body.search #action-descendre,
+    body.error404 #action-descendre {
+        font-size: 0.8vw;
+        margin-top: 1.2em;
+        padding: 0.68em 1.79em;
+    }
+    #action-descendre:hover { box-shadow: 0 0.65em 0 var(--prairie-sombre), 0 0.98em 1.52em rgba(0,0,0,0.35); }
+    #action-descendre:active { box-shadow: 0 0.11em 0 var(--prairie-sombre); }
+    #couche-soleil svg { width: 11.58vw; height: 11.58vw; }
+    body.single #couche-soleil svg, body.page #couche-soleil svg { width: 7.37vw; height: 7.37vw; }
+    #bandeau-defilement { font-size: 0.97vw; gap: 2.95vw; }
+}

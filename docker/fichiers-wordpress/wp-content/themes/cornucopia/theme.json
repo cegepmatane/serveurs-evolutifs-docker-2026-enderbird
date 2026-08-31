@@ -1,0 +1,107 @@
+{
+    "$schema": "https://schemas.wp.org/wp/6.7/theme.json",
+    "version": 3,
+    "settings": {
+        "color": {
+            "palette": [
+                { "slug": "base", "name": "Crème", "color": "#FFFDF5" },
+                { "slug": "contrast", "name": "Encre", "color": "#111111" },
+                { "slug": "accent-1", "name": "Vert légume", "color": "#34C759" },
+                { "slug": "accent-2", "name": "Vert feuillage foncé", "color": "#177A3B" },
+                { "slug": "accent-3", "name": "Orange carotte", "color": "#FF9500" },
+                { "slug": "accent-4", "name": "Rouge tomate", "color": "#FF3B30" },
+                { "slug": "accent-5", "name": "Serre pâle", "color": "#E8F7EC" },
+                { "slug": "accent-6", "name": "Panier osier", "color": "#C68642" }
+            ]
+        },
+        "typography": {
+            "fontFamilies": [
+                {
+                    "slug": "bungee",
+                    "name": "Bungee (enseigne)",
+                    "fontFamily": "Bungee, sans-serif",
+                    "fontFace": [
+                        { "fontFamily": "Bungee", "fontWeight": "400", "fontStyle": "normal", "src": [ "file:./fonts/bungee.woff2" ] }
+                    ]
+                },
+                {
+                    "slug": "lilita",
+                    "name": "Lilita One (titres)",
+                    "fontFamily": "'Lilita One', sans-serif",
+                    "fontFace": [
+                        { "fontFamily": "Lilita One", "fontWeight": "400", "fontStyle": "normal", "src": [ "file:./fonts/lilita-one.woff2" ] }
+                    ]
+                },
+                {
+                    "slug": "nunito",
+                    "name": "Nunito (texte)",
+                    "fontFamily": "Nunito, sans-serif",
+                    "fontFace": [
+                        { "fontFamily": "Nunito", "fontWeight": "400", "fontStyle": "normal", "src": [ "file:./fonts/nunito-400.woff2" ] },
+                        { "fontFamily": "Nunito", "fontWeight": "700", "fontStyle": "normal", "src": [ "file:./fonts/nunito-700.woff2" ] }
+                    ]
+                }
+            ]
+        }
+    },
+    "styles": {
+        "color": {
+            "background": "var(--wp--preset--color--base)",
+            "text": "var(--wp--preset--color--contrast)"
+        },
+        "typography": {
+            "fontFamily": "var(--wp--preset--font-family--nunito)",
+            "fontSize": "1.125rem",
+            "lineHeight": "1.7"
+        },
+        "elements": {
+            "heading": {
+                "typography": {
+                    "fontFamily": "var(--wp--preset--font-family--lilita)",
+                    "fontWeight": "400"
+                }
+            },
+            "link": {
+                "color": { "text": "var(--wp--preset--color--accent-2)" },
+                ":hover": { "color": { "text": "var(--wp--preset--color--accent-1)" } }
+            },
+            "button": {
+                "color": {
+                    "background": "var(--wp--preset--color--accent-1)",
+                    "text": "var(--wp--preset--color--contrast)"
+                }
+            }
+        },
+        "blocks": {
+            "core/site-title": {
+                "typography": {
+                    "fontFamily": "var(--wp--preset--font-family--bungee)",
+                    "fontSize": "1.6rem"
+                },
+                "elements": {
+                    "link": {
+                        "color": { "text": "var(--wp--preset--color--contrast)" },
+                        ":hover": { "color": { "text": "var(--wp--preset--color--accent-2)" } }
+                    }
+                }
+            },
+            "core/site-tagline": {
+                "typography": {
+                    "fontFamily": "var(--wp--preset--font-family--nunito)",
+                    "fontSize": "1rem"
+                },
+                "color": { "text": "var(--wp--preset--color--accent-2)" }
+            },
+            "core/quote": {
+                "border": {
+                    "left": {
+                        "color": "var(--wp--preset--color--accent-1)",
+                        "style": "solid",
+                        "width": "6px"
+                    }
+                },
+                "color": { "background": "var(--wp--preset--color--accent-5)" }
+            }
+        }
+    }
+}

@@ -1,0 +1,59 @@
+/*
+Theme Name: Cornucopia
+Theme URI: https://cornucopia.projet.autos
+Description: Thème enfant de Twenty Twenty-Five pour la ferme maraîchère bio de Flora et Hazel. Palette crème et verte, contours noirs épais, fontes Bungee, Lilita One et Nunito servies localement. Fil rouge du cours Serveur Évolutif.
+Author: Flora et Hazel (ferme Cornucopia)
+Template: twentytwentyfive
+Version: 1.0
+Text Domain: cornucopia
+*/
+
+/* Le titre du site porte la fonte affiche, comme l'enseigne de la ferme */
+.wp-block-site-title a {
+    text-decoration: none;
+}
+
+/* Cartes d'articles : contour noir epais et ombre franche, style cartoon du cours */
+.wp-block-post-featured-image img {
+    border: 4px solid #111;
+    border-radius: 18px;
+    box-shadow: 8px 8px 0 rgba(17, 17, 17, 0.18);
+}
+
+/* Le theme parent impose un ratio d'aspect au bloc image mise en avant,
+   ce qui ajoute une bande blanche sous notre panier 1200x630 :
+   on laisse l'image reprendre son ratio naturel. */
+.wp-block-post-featured-image {
+    aspect-ratio: auto !important;
+}
+.wp-block-post-featured-image img {
+    aspect-ratio: auto !important;
+    height: auto !important;
+}
+
+/* Images dans les articles : meme traitement */
+.wp-block-image img {
+    border: 4px solid #111;
+    border-radius: 18px;
+    box-shadow: 8px 8px 0 rgba(17, 17, 17, 0.18);
+}
+
+/* Actions (boutons) : pastilles vertes cerclees de noir */
+.wp-block-button .wp-block-button__link {
+    border: 3px solid #111;
+    border-radius: 999px;
+    box-shadow: 4px 4px 0 #111;
+    font-family: "Lilita One", sans-serif;
+}
+
+/* Titres d'articles dans les listes : soulignement vert au survol */
+.wp-block-post-title a:hover {
+    text-decoration: underline;
+    text-decoration-color: #34C759;
+    text-decoration-thickness: 4px;
+}
+
+/* Pastille de date discrete */
+.wp-block-post-date {
+    color: #177A3B;
+}

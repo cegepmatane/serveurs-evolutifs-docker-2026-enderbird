@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cornucopia - Potager animé</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lilita+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --ciel: #8ED8F8;
+        --aube: #FFE9C7;
+        --menthe: #B8EFC4;
+        --menthe-foncee: #1F8B4C;
+        --mais: #FFE08A;
+        --mais-fonce: #B27B00;
+        --radis: #FFC9D6;
+        --radis-fonce: #C2185B;
+        --terre: #9B6B3F;
+        --terre-foncee: #6B4423;
+        --encre: #33261A;
+        --creme: #FFFDF5;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: 'Nunito', sans-serif;
+        color: var(--encre);
+        background: #FFF6E8;
+        overflow-x: hidden;
+    }
+
+    /* ===================== SCENE POTAGER ===================== */
+    #scene {
+        position: relative;
+        min-height: 88vh;
+        overflow: hidden;
+        background: linear-gradient(180deg, var(--ciel) 0%, var(--aube) 78%, #F7E1B5 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    #scene-decor { position: absolute; inset: 0; }
+
+    .nuage {
+        position: absolute;
+        animation: deriverNuage linear infinite;
+    }
+    @keyframes deriverNuage {
+        from { transform: translateX(-25vw); }
+        to { transform: translateX(125vw); }
+    }
+
+    /* Moulin : les ailes tournent */
+    #moulin { position: absolute; bottom: 16vh; right: 7vw; width: 190px; }
+    #moulin-ailes {
+        animation: tournerAiles 9s linear infinite;
+        transform-origin: 95px 74px;
+    }
+    @keyframes tournerAiles { to { transform: rotate(360deg); } }
+
+    /* Tournesols : balancement doux */
+    .tournesol { position: absolute; bottom: 10vh; transform-origin: bottom center; animation: balancerTournesol 4.5s ease-in-out infinite alternate; }
+    @keyframes balancerTournesol {
+        from { transform: rotate(-4deg); }
+        to { transform: rotate(5deg); }
+    }
+    #tournesol-coeur-un, #tournesol-coeur-deux { animation: tournerLentement 26s linear infinite; transform-origin: center; transform-box: fill-box; }
+    @keyframes tournerLentement { to { transform: rotate(360deg); } }
+
+    /* Papillon : trajectoire en boucle */
+    #papillon { position: absolute; top: 24vh; left: 12vw; animation: voleterPapillon 13s ease-in-out infinite; }
+    #papillon svg { animation: battreDesAiles 0.5s ease-in-out infinite alternate; }
+    @keyframes voleterPapillon {
+        0% { transform: translate(0, 0); }
+        25% { transform: translate(26vw, -9vh); }
+        50% { transform: translate(52vw, 3vh); }
+        75% { transform: translate(30vw, 11vh); }
+        100% { transform: translate(0, 0); }
+    }
+    @keyframes battreDesAiles { from { transform: scaleX(1); } to { transform: scaleX(0.55); } }
+
+    /* Rangs de terre au bas de la scène */
+    #rangs { position: absolute; bottom: 0; left: 0; width: 100%; height: 18vh; min-height: 110px; }
+
+    #titre-scene { position: relative; z-index: 10; text-align: center; padding-top: 10vh; }
+    #titre-principal {
+        font-family: 'Bungee', cursive;
+        font-size: clamp(2.5rem, 7vw, 5rem);
+        color: #fff;
+        text-shadow: 0 4px 0 var(--menthe-foncee), 0 9px 0 rgba(0,0,0,0.14), 0 16px 30px rgba(0,0,0,0.3);
+        animation: pousserTitre 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+    @keyframes pousserTitre {
+        from { transform: translateY(60px) scale(0.6); opacity: 0; }
+        to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    #titre-sous-titre {
+        display: inline-block;
+        margin-top: 1rem;
+        font-family: 'Lilita One', cursive;
+        font-size: clamp(1rem, 2.3vw, 1.45rem);
+        color: #fff;
+        background: var(--radis-fonce);
+        padding: 0.5rem 1.7rem;
+        border-radius: 999px;
+        border: 4px solid #fff;
+        box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+        transform: rotate(2deg);
+        animation: pousserTitre 0.9s 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    /* ===================== GRILLE DE CARTES COLOREES ===================== */
+    .section { padding: 4.2rem 1.5rem; }
+    .section-boite { max-width: 1100px; margin: 0 auto; }
+    .section-titre {
+        font-family: 'Lilita One', cursive;
+        font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+        color: var(--terre-foncee);
+        text-align: center;
+        margin-bottom: 0.6rem;
+    }
+    .section-titre .surligne { background: linear-gradient(180deg, transparent 55%, var(--mais) 55%); padding: 0 0.3rem; }
+    .section-sous-titre { text-align: center; font-size: 1.1rem; font-weight: 700; color: #7A5A36; margin-bottom: 2.8rem; }
+
+    #nouvelles { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.2rem; }
+    .nouvelle {
+        border-radius: 28px;
+        padding: 1.7rem;
+        position: relative;
+        border: 5px solid var(--encre);
+        transform: translateY(70px) scale(0.85);
+        opacity: 0;
+        transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
+    }
+    .nouvelle.visible { transform: translateY(0) scale(1); opacity: 1; }
+    .nouvelle:nth-child(1) { background: var(--menthe); box-shadow: 0 10px 0 var(--menthe-foncee); }
+    .nouvelle:nth-child(2) { background: var(--mais); box-shadow: 0 10px 0 var(--mais-fonce); }
+    .nouvelle:nth-child(3) { background: var(--radis); box-shadow: 0 10px 0 var(--radis-fonce); }
+    .nouvelle:hover { transform: translateY(-8px) rotate(-1deg); }
+    .nouvelle-vignette {
+        background: var(--creme);
+        border-radius: 20px;
+        border: 4px solid var(--encre);
+        overflow: hidden;
+    }
+    .nouvelle-vignette svg { display: block; width: 100%; height: auto; }
+    .nouvelle-titre { font-family: 'Lilita One', cursive; font-size: 1.45rem; margin: 1rem 0 0.5rem; }
+    .nouvelle-texte { line-height: 1.65; font-weight: 600; }
+    .nouvelle-pied { display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem; }
+    .nouvelle-date { font-weight: 800; font-size: 0.9rem; opacity: 0.75; text-transform: uppercase; }
+    .nouvelle-action {
+        font-family: 'Lilita One', cursive;
+        color: #fff;
+        background: var(--encre);
+        text-decoration: none;
+        padding: 0.5rem 1.2rem;
+        border-radius: 999px;
+        box-shadow: 0 4px 0 rgba(0,0,0,0.35);
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .nouvelle-action:hover { transform: translateY(-3px) scale(1.05); }
+
+    /* ===================== LE MARCHE (compteurs) ===================== */
+    #section-marche { background: var(--menthe-foncee); position: relative; }
+    #section-marche .section-titre { color: #fff; }
+    #section-marche .section-sous-titre { color: #D9F5E3; }
+    #compteurs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.8rem; }
+    .compteur {
+        background: var(--creme);
+        border-radius: 24px;
+        border: 5px solid var(--encre);
+        box-shadow: 0 8px 0 rgba(0,0,0,0.28);
+        text-align: center;
+        padding: 1.6rem 1rem;
+        transform: scale(0.7);
+        opacity: 0;
+        transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+    }
+    .compteur.visible { transform: scale(1); opacity: 1; }
+    .compteur-valeur { font-family: 'Bungee', cursive; font-size: 2.6rem; color: var(--menthe-foncee); }
+    .compteur-nom { font-family: 'Lilita One', cursive; font-size: 1.05rem; color: var(--terre-foncee); margin-top: 0.3rem; }
+
+    /* ===================== PIED DE PAGE ===================== */
+    #pied-de-page {
+        background: var(--terre-foncee);
+        color: var(--creme);
+        text-align: center;
+        padding: 2.6rem 1.5rem;
+    }
+    #pied-titre { font-family: 'Bungee', cursive; font-size: 1.4rem; color: var(--mais); margin-bottom: 0.4rem; }
+    #pied-texte { font-weight: 700; opacity: 0.9; }
+</style>
+</head>
+<body>
+
+<!-- ===================== SCENE POTAGER ===================== -->
+<header id="scene">
+    <div id="scene-decor">
+        <!-- Nuages -->
+        <svg class="nuage" style="top:7vh; width:160px; animation-duration: 60s;" viewBox="0 0 150 60">
+            <ellipse cx="45" cy="40" rx="42" ry="19" fill="#fff"/>
+            <ellipse cx="92" cy="31" rx="38" ry="22" fill="#fff"/>
+            <ellipse cx="122" cy="43" rx="26" ry="14" fill="#fff"/>
+        </svg>
+        <svg class="nuage" style="top:17vh; width:105px; animation-duration: 85s; animation-delay: -40s;" viewBox="0 0 150 60">
+            <ellipse cx="50" cy="38" rx="44" ry="18" fill="#fff" opacity="0.85"/>
+            <ellipse cx="100" cy="33" rx="34" ry="19" fill="#fff" opacity="0.85"/>
+        </svg>
+
+        <!-- Papillon -->
+        <div id="papillon">
+            <svg width="52" height="44" viewBox="0 0 52 44">
+                <ellipse cx="26" cy="24" rx="4" ry="14" fill="#33261A"/>
+                <path d="M22 20 Q2 2 6 22 Q8 34 22 28 Z" fill="#FF9500" stroke="#B26400" stroke-width="3"/>
+                <path d="M30 20 Q50 2 46 22 Q44 34 30 28 Z" fill="#FF9500" stroke="#B26400" stroke-width="3"/>
+                <path d="M24 12 Q20 4 15 3 M28 12 Q32 4 37 3" stroke="#33261A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <!-- Moulin -->
+        <div id="moulin">
+            <svg viewBox="0 0 190 230">
+                <polygon points="70,230 120,230 106,92 84,92" fill="#D9534F" stroke="#8B2E2B" stroke-width="5"/>
+                <circle cx="95" cy="74" r="17" fill="#FFFDF5" stroke="#8B2E2B" stroke-width="5"/>
+                <g id="moulin-ailes" stroke="#5C3A18" stroke-width="5" fill="#F2E3BE">
+                    <path d="M95 74 L95 6 L118 20 L100 74 Z"/>
+                    <path d="M95 74 L163 74 L149 97 L95 79 Z"/>
+                    <path d="M95 74 L95 142 L72 128 L90 74 Z"/>
+                    <path d="M95 74 L27 74 L41 51 L95 69 Z"/>
+                </g>
+                <circle cx="95" cy="74" r="7" fill="#5C3A18"/>
+                <rect x="80" y="150" width="30" height="42" rx="6" fill="#8B5A2B" stroke="#5C3A18" stroke-width="4"/>
+            </svg>
+        </div>
+
+        <!-- Tournesols -->
+        <div class="tournesol" style="left:5vw; animation-delay: 0s;">
+            <svg width="95" height="220" viewBox="0 0 95 220">
+                <path d="M47 220 L47 90" stroke="#2F9E1F" stroke-width="9" stroke-linecap="round"/>
+                <path d="M47 150 Q22 140 16 118 Q40 122 47 138 Z" fill="#37AE27"/>
+                <path d="M47 172 Q72 162 78 140 Q54 144 47 160 Z" fill="#37AE27"/>
+                <g>
+                    <g fill="#FFD23F" stroke="#F5A700" stroke-width="3">
+                        <ellipse cx="47" cy="28" rx="11" ry="20"/>
+                        <ellipse cx="47" cy="92" rx="11" ry="20"/>
+                        <ellipse cx="15" cy="60" rx="20" ry="11"/>
+                        <ellipse cx="79" cy="60" rx="20" ry="11"/>
+                        <ellipse cx="25" cy="37" rx="16" ry="11" transform="rotate(-45 25 37)"/>
+                        <ellipse cx="69" cy="37" rx="16" ry="11" transform="rotate(45 69 37)"/>
+                        <ellipse cx="25" cy="83" rx="16" ry="11" transform="rotate(45 25 83)"/>
+                        <ellipse cx="69" cy="83" rx="16" ry="11" transform="rotate(-45 69 83)"/>
+                    </g>
+                    <circle id="tournesol-coeur-un" cx="47" cy="60" r="21" fill="#8B5A2B" stroke="#5C3A18" stroke-width="4" stroke-dasharray="6 5"/>
+                </g>
+            </svg>
+        </div>
+        <div class="tournesol" style="left:16vw; animation-delay: -2.2s; transform: scale(0.72);">
+            <svg width="95" height="190" viewBox="0 0 95 220">
+                <path d="M47 220 L47 90" stroke="#2F9E1F" stroke-width="9" stroke-linecap="round"/>
+                <path d="M47 160 Q22 150 16 128 Q40 132 47 148 Z" fill="#37AE27"/>
+                <g>
+                    <g fill="#FFD23F" stroke="#F5A700" stroke-width="3">
+                        <ellipse cx="47" cy="28" rx="11" ry="20"/>
+                        <ellipse cx="47" cy="92" rx="11" ry="20"/>
+                        <ellipse cx="15" cy="60" rx="20" ry="11"/>
+                        <ellipse cx="79" cy="60" rx="20" ry="11"/>
+                        <ellipse cx="25" cy="37" rx="16" ry="11" transform="rotate(-45 25 37)"/>
+                        <ellipse cx="69" cy="37" rx="16" ry="11" transform="rotate(45 69 37)"/>
+                        <ellipse cx="25" cy="83" rx="16" ry="11" transform="rotate(45 25 83)"/>
+                        <ellipse cx="69" cy="83" rx="16" ry="11" transform="rotate(-45 69 83)"/>
+                    </g>
+                    <circle id="tournesol-coeur-deux" cx="47" cy="60" r="21" fill="#8B5A2B" stroke="#5C3A18" stroke-width="4" stroke-dasharray="6 5"/>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Rangs de terre avec légumes qui pointent -->
+        <svg id="rangs" viewBox="0 0 1440 160" preserveAspectRatio="none">
+            <path d="M0,34 Q720,0 1440,34 L1440,160 L0,160 Z" fill="var(--terre)"/>
+            <path d="M0,70 Q720,38 1440,70" stroke="var(--terre-foncee)" stroke-width="10" fill="none"/>
+            <path d="M0,108 Q720,78 1440,108" stroke="var(--terre-foncee)" stroke-width="10" fill="none"/>
+            <g fill="#37AE27">
+                <ellipse cx="120" cy="52" rx="16" ry="9"/><ellipse cx="300" cy="42" rx="16" ry="9"/><ellipse cx="480" cy="36" rx="16" ry="9"/><ellipse cx="660" cy="32" rx="16" ry="9"/><ellipse cx="840" cy="33" rx="16" ry="9"/><ellipse cx="1020" cy="38" rx="16" ry="9"/><ellipse cx="1200" cy="45" rx="16" ry="9"/><ellipse cx="1380" cy="54" rx="16" ry="9"/>
+            </g>
+            <g fill="#FF3B30" stroke="#B22B23" stroke-width="3">
+                <circle cx="210" cy="82" r="11"/><circle cx="570" cy="66" r="11"/><circle cx="930" cy="68" r="11"/><circle cx="1290" cy="80" r="11"/>
+            </g>
+            <g fill="#FF9500" stroke="#B26400" stroke-width="3">
+                <polygon points="390,96 400,120 380,120"/><polygon points="750,88 760,112 740,112"/><polygon points="1110,92 1120,116 1100,116"/>
+            </g>
+        </svg>
+    </div>
+
+    <div id="titre-scene">
+        <h1 id="titre-principal">CORNUCOPIA</h1>
+        <p id="titre-sous-titre">Le potager qui ne dort jamais</p>
+    </div>
+</header>
+
+<!-- ===================== NOUVELLES EN CARTES COLOREES ===================== -->
+<section class="section" id="section-nouvelles">
+    <div class="section-boite">
+        <h2 class="section-titre">Ça pousse <span class="surligne">cette semaine</span></h2>
+        <p class="section-sous-titre">Trois histoires fraîchement cueillies dans les rangs.</p>
+        <div id="nouvelles">
+            <article class="nouvelle">
+                <div class="nouvelle-vignette">
+                    <svg viewBox="0 0 400 200">
+                        <rect width="400" height="200" fill="#E8F7EC"/>
+                        <!-- Rang de laitues -->
+                        <path d="M0,160 L400,160 L400,200 L0,200 Z" fill="#9B6B3F"/>
+                        <g>
+                            <g transform="translate(80,120)">
+                                <circle r="34" fill="#58C127" stroke="#2F7A12" stroke-width="5"/>
+                                <path d="M-20 -12 Q0 -38 20 -12 M-26 4 Q0 -18 26 4 M-20 18 Q0 0 20 18" stroke="#2F7A12" stroke-width="4" fill="none" stroke-linecap="round"/>
+                            </g>
+                            <g transform="translate(200,116)">
+                                <circle r="40" fill="#6DD400" stroke="#2F7A12" stroke-width="5"/>
+                                <path d="M-24 -14 Q0 -44 24 -14 M-30 4 Q0 -20 30 4 M-22 22 Q0 2 22 22" stroke="#2F7A12" stroke-width="4" fill="none" stroke-linecap="round"/>
+                            </g>
+                            <g transform="translate(320,120)">
+                                <circle r="34" fill="#58C127" stroke="#2F7A12" stroke-width="5"/>
+                                <path d="M-20 -12 Q0 -38 20 -12 M-26 4 Q0 -18 26 4 M-20 18 Q0 0 20 18" stroke="#2F7A12" stroke-width="4" fill="none" stroke-linecap="round"/>
+                            </g>
+                        </g>
+                        <circle cx="352" cy="38" r="22" fill="#FFD23F" stroke="#F5A700" stroke-width="5"/>
+                    </svg>
+                </div>
+                <h3 class="nouvelle-titre">Les laitues font la roue</h3>
+                <p class="nouvelle-texte">Trois variétés croquantes prêtes pour les paniers du jeudi. La frisée verte gagne le concours de volume de la semaine.</p>
+                <div class="nouvelle-pied">
+                    <span class="nouvelle-date">9 août</span>
+                    <a class="nouvelle-action" href="#">Lire</a>
+                </div>
+            </article>
+            <article class="nouvelle">
+                <div class="nouvelle-vignette">
+                    <svg viewBox="0 0 400 200">
+                        <rect width="400" height="200" fill="#FFF3D6"/>
+                        <!-- Epis de maïs -->
+                        <g transform="translate(120,100)">
+                            <ellipse cx="0" cy="0" rx="26" ry="62" fill="#FFD23F" stroke="#B27B00" stroke-width="5"/>
+                            <g fill="#B27B00" opacity="0.55">
+                                <circle cx="-10" cy="-40" r="4"/><circle cx="8" cy="-44" r="4"/><circle cx="-2" cy="-26" r="4"/><circle cx="-14" cy="-12" r="4"/><circle cx="12" cy="-20" r="4"/><circle cx="4" cy="-2" r="4"/><circle cx="-8" cy="14" r="4"/><circle cx="10" cy="24" r="4"/><circle cx="-4" cy="38" r="4"/>
+                            </g>
+                            <path d="M-24 30 Q-52 10 -46 -30 Q-20 -16 -18 20 Z" fill="#37AE27" stroke="#2F7A12" stroke-width="4"/>
+                            <path d="M24 30 Q52 10 46 -30 Q20 -16 18 20 Z" fill="#37AE27" stroke="#2F7A12" stroke-width="4"/>
+                        </g>
+                        <g transform="translate(268,108) rotate(9)">
+                            <ellipse cx="0" cy="0" rx="24" ry="56" fill="#FFE08A" stroke="#B27B00" stroke-width="5"/>
+                            <g fill="#B27B00" opacity="0.5">
+                                <circle cx="-8" cy="-34" r="4"/><circle cx="8" cy="-22" r="4"/><circle cx="-4" cy="-6" r="4"/><circle cx="8" cy="12" r="4"/><circle cx="-8" cy="26" r="4"/>
+                            </g>
+                            <path d="M-22 26 Q-46 8 -42 -28 Q-18 -14 -16 18 Z" fill="#37AE27" stroke="#2F7A12" stroke-width="4"/>
+                        </g>
+                    </svg>
+                </div>
+                <h3 class="nouvelle-titre">Le maïs sucré est prêt</h3>
+                <p class="nouvelle-texte">Première récolte de la saison : les épis sont dodus et Basile l'épouvantail n'y est pas pour rien, dit-il.</p>
+                <div class="nouvelle-pied">
+                    <span class="nouvelle-date">7 août</span>
+                    <a class="nouvelle-action" href="#">Lire</a>
+                </div>
+            </article>
+            <article class="nouvelle">
+                <div class="nouvelle-vignette">
+                    <svg viewBox="0 0 400 200">
+                        <rect width="400" height="200" fill="#FFE9F0"/>
+                        <!-- Botte de radis -->
+                        <g transform="translate(140,110)">
+                            <circle cx="0" cy="0" r="34" fill="#FF5C8A" stroke="#C2185B" stroke-width="5"/>
+                            <path d="M0 34 L0 52" stroke="#C2185B" stroke-width="5" stroke-linecap="round"/>
+                            <path d="M-6 -30 Q-14 -66 -30 -72 M0 -34 Q0 -70 -4 -78 M6 -30 Q14 -66 30 -72" stroke="#2F9E1F" stroke-width="7" fill="none" stroke-linecap="round"/>
+                        </g>
+                        <g transform="translate(240,124) scale(0.8)">
+                            <circle cx="0" cy="0" r="34" fill="#FF7AA2" stroke="#C2185B" stroke-width="5"/>
+                            <path d="M0 34 L0 52" stroke="#C2185B" stroke-width="5" stroke-linecap="round"/>
+                            <path d="M-6 -30 Q-14 -66 -30 -72 M6 -30 Q14 -66 30 -72" stroke="#2F9E1F" stroke-width="7" fill="none" stroke-linecap="round"/>
+                        </g>
+                        <g transform="translate(310,120) scale(0.62)">
+                            <circle cx="0" cy="0" r="34" fill="#FF5C8A" stroke="#C2185B" stroke-width="6"/>
+                            <path d="M0 34 L0 54" stroke="#C2185B" stroke-width="6" stroke-linecap="round"/>
+                            <path d="M0 -34 Q0 -70 -4 -78 M6 -30 Q14 -66 30 -72" stroke="#2F9E1F" stroke-width="8" fill="none" stroke-linecap="round"/>
+                        </g>
+                    </svg>
+                </div>
+                <h3 class="nouvelle-titre">Radis : la botte secrète</h3>
+                <p class="nouvelle-texte">Piquants juste ce qu'il faut. Flora les glisse en surprise dans les paniers famille cette semaine, chut.</p>
+                <div class="nouvelle-pied">
+                    <span class="nouvelle-date">5 août</span>
+                    <a class="nouvelle-action" href="#">Lire</a>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== LE MARCHE EN CHIFFRES ===================== -->
+<section class="section" id="section-marche">
+    <div class="section-boite">
+        <h2 class="section-titre">La ferme en chiffres</h2>
+        <p class="section-sous-titre">Une saison qui pousse fort, comptée par Hazel.</p>
+        <div id="compteurs">
+            <div class="compteur">
+                <div class="compteur-valeur" data-cible="42">0</div>
+                <div class="compteur-nom">variétés de légumes</div>
+            </div>
+            <div class="compteur">
+                <div class="compteur-valeur" data-cible="180">0</div>
+                <div class="compteur-nom">paniers par semaine</div>
+            </div>
+            <div class="compteur">
+                <div class="compteur-valeur" data-cible="12">0</div>
+                <div class="compteur-nom">poules très occupées</div>
+            </div>
+            <div class="compteur">
+                <div class="compteur-valeur" data-cible="1">0</div>
+                <div class="compteur-nom">épouvantail vedette</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== PIED DE PAGE ===================== -->
+<footer id="pied-de-page">
+    <p id="pied-titre">CORNUCOPIA</p>
+    <p id="pied-texte">Ferme maraîchère bio de Flora et Hazel - le kiosque vous attend le jeudi de 15 h à 19 h</p>
+</footer>
+
+<script>
+    // Apparition des cartes : elles poussent comme des semis.
+    const observateurCartes = new IntersectionObserver(function (entrees) {
+        entrees.forEach(function (entree) {
+            if (entree.isIntersecting) {
+                entree.target.classList.add('visible');
+                observateurCartes.unobserve(entree.target);
+            }
+        });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.nouvelle, .compteur').forEach(function (carte) {
+        observateurCartes.observe(carte);
+    });
+
+    // Compteurs animés : la valeur grimpe quand la carte devient visible.
+    function animerCompteur(elementValeur) {
+        const cible = parseInt(elementValeur.dataset.cible, 10);
+        const dureeMillisecondes = 1400;
+        const debut = performance.now();
+        function avancer(maintenant) {
+            const progression = Math.min((maintenant - debut) / dureeMillisecondes, 1);
+            const adoucie = 1 - Math.pow(1 - progression, 3);
+            elementValeur.textContent = Math.round(cible * adoucie);
+            if (progression < 1) { requestAnimationFrame(avancer); }
+        }
+        requestAnimationFrame(avancer);
+    }
+    const observateurCompteurs = new IntersectionObserver(function (entrees) {
+        entrees.forEach(function (entree) {
+            if (entree.isIntersecting) {
+                animerCompteur(entree.target);
+                observateurCompteurs.unobserve(entree.target);
+            }
+        });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.compteur-valeur').forEach(function (valeur) {
+        observateurCompteurs.observe(valeur);
+    });
+</script>
+</body>
+</html>

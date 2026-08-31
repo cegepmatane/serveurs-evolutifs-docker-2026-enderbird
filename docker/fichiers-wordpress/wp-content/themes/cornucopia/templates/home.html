@@ -1,0 +1,34 @@
+<!-- wp:template-part {"slug":"header"} /-->
+
+<!-- wp:group {"tagName":"main","style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
+<main class="wp-block-group" style="margin-top:var(--wp--preset--spacing--60)">
+	<!-- wp:heading {"level":1} -->
+	<h1 class="wp-block-heading">Les nouvelles de la ferme</h1>
+	<!-- /wp:heading -->
+	<!-- wp:paragraph {"style":{"color":{"text":"var:preset|color|accent-2"}}} -->
+	<p class="has-text-color" style="color:var(--wp--preset--color--accent-2)">Paniers, récoltes et vie des champs : Flora et Hazel vous racontent leur ferme.</p>
+	<!-- /wp:paragraph -->
+	<!-- wp:query {"queryId":1,"query":{"perPage":10,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":true}} -->
+	<div class="wp-block-query">
+		<!-- wp:post-template {"style":{"spacing":{"blockGap":"var:preset|spacing|50"}},"layout":{"type":"default"}} -->
+			<!-- wp:post-featured-image {"isLink":true,"style":{"spacing":{"margin":{"top":"var:preset|spacing|50"}}}} /-->
+			<!-- wp:post-title {"isLink":true} /-->
+			<!-- wp:post-date /-->
+			<!-- wp:post-excerpt {"moreText":"Lire la suite","showMoreOnNewLine":true} /-->
+		<!-- /wp:post-template -->
+		<!-- wp:query-pagination {"layout":{"type":"flex","justifyContent":"space-between"}} -->
+			<!-- wp:query-pagination-previous /-->
+			<!-- wp:query-pagination-numbers /-->
+			<!-- wp:query-pagination-next /-->
+		<!-- /wp:query-pagination -->
+		<!-- wp:query-no-results -->
+			<!-- wp:paragraph -->
+			<p>Rien à lire pour le moment : Flora et Hazel sont aux champs. Revenez bientôt!</p>
+			<!-- /wp:paragraph -->
+		<!-- /wp:query-no-results -->
+	</div>
+	<!-- /wp:query -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer"} /-->
