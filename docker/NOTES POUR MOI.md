@@ -4,6 +4,8 @@
 
 Pour rebuild :
 - `docker build -t boutique-cornucopia:1.0 .`
+Delete the old one :
+- `docker rm -f boutique-cornucopia`
 Running it :
 - `docker run --name boutique-cornucopia -p "8080:80" boutique-cornucopia:1.0`
   
