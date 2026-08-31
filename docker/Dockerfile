@@ -19,3 +19,6 @@ RUN chmod +x /usr/local/bin/demarrer-services.sh
 RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
 
 EXPOSE 80
+
+#[DÉFINITION]: exécuter un script comme main process
+ENTRYPOINT ["/usr/local/bin/demarrer-services.sh"]
