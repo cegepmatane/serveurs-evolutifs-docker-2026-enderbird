@@ -26,7 +26,7 @@ if [ ! -f "$cheminFichierTemoin" ]; then
     mysql $DB_NAME < $cheminBaseDeDonnees
 
     # Repointer l'adresse du site (réglages), puis remplacer l'ancienne adresse partout dans le contenu
-    mysql nom-de-la-base -e "UPDATE wp_options SET option_value='http://localhost:8080'
+    mysql $DB_NAME -e "UPDATE wp_options SET option_value='http://localhost:8080'
             WHERE option_name IN ('siteurl','home');
         UPDATE wp_posts SET post_content = REPLACE(post_content,
             'https://cornucopia.projet.autos', 'http://localhost:8080');
