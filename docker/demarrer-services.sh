@@ -10,6 +10,7 @@ until mysqladmin ping --silent; do
 done
 
 # 3. Premier démarrage : préparer la base (voir l'étape 02)
+cheminFichierTemoin="/var/lib/mysql/initialise.flag"
 
 # 4. Apache en avant-plan = PID 1 du conteneur
 exec apache2-foreground
