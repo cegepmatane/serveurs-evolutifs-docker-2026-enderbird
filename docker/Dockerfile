@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y --no-install-recommends mariadb-server mariadb-client curl \
     && docker-php-ext-install mysqli \
+    && echo "mysqli.default_socket = /run/mysqld/mysqld.sock" > /usr/local/etc/php/conf.d/mysqli.ini \
     && a2enmod rewrite \
     && sed -ri 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf \
     && apt-get clean \
