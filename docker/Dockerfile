@@ -18,6 +18,11 @@ RUN chmod +x /usr/local/bin/demarrer-services.sh
 # Préparer le dossier de données MariaDB
 RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
 
+# Base de données et fichiers wordpress
+COPY fichiers-wordpress/ /var/www/html/
+COPY base-de-donnees.sql /docker-entree/
+RUN chown -R www-data:www-data /var/www/html
+
 EXPOSE 80
 
 #[DÉFINITION]: exécuter un script comme main process
