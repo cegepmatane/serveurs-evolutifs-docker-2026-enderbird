@@ -1,0 +1,16 @@
+# Docker/WordPress
+wordpress/
+database/
+
+# Environment files / secrets
+.env
+.env.*
+
+# Logs
+*.log
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
