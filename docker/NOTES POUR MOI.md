@@ -13,3 +13,4 @@ Running it :
 
 Vérifier si déjà en train de run :
 - `docker ps`
+
