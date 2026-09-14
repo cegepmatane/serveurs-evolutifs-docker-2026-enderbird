@@ -1,31 +1,26 @@
-version: '2'
 services:
   wordpress:
     depends_on:
       - db
-    image: wordpress
+    image: wordpress:7.1
     restart: always
     volumes:
-      - ./wordpress:/var/www/html
-    environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: admin
-      WORDPRESS_DB_PASSWORD: admin
-      WORDPRESS_DB_NAME: wordpress
+      - ./fichiers-wordpress:/var/www/html
     ports:
       - 8082:80
     networks:
       - myNetwork
   db:
-    image: mysql
+    image: mysql:8.0
     restart: always
     volumes:
       - ./database:/var/lib/mysql
+      - ./base-de-donnees.sql:/docker-entrypoint-initdb.d/base-de-donnees.sql
     environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: ${MYSQL_MOT_DE_PASSE_ROOT}
+      MYSQL_DATABASE: cornucopia
+      MYSQL_USER: ${MYSQL_UTILISATEUR}
+      MYSQL_PASSWORD: ${MYSQL_MOT_DE_PASSE}
     networks:
       - myNetwork
   phpmyadmin:
@@ -36,14 +31,9 @@ services:
     ports:
       - 8083:80
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_MOT_DE_PASSE_ROOT}
-      MYSQL_DATABASE: cornucopia
-      MYSQL_USER: ${MYSQL_UTILISATEUR}
-      MYSQL_PASSWORD: ${MYSQL_MOT_DE_PASSE}
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: racine-potager-2026
     networks:
       - myNetwork
 networks:
   myNetwork:
-volumes:
-  database:
-  wordpress:
