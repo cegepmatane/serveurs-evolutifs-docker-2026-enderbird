@@ -36,8 +36,10 @@ services:
     ports:
       - 8083:80
     environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: ${MYSQL_MOT_DE_PASSE_ROOT}
+      MYSQL_DATABASE: cornucopia
+      MYSQL_USER: ${MYSQL_UTILISATEUR}
+      MYSQL_PASSWORD: ${MYSQL_MOT_DE_PASSE}
     networks:
       - myNetwork
 networks:
