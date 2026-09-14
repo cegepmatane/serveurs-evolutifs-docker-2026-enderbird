@@ -3,6 +3,9 @@
 - DB_USER=flora
 - DB_PASSWORD=potager-2026
 
+UTILISATEUR: flora
+PASSWORD: cornucopia-2026
+
 # jmeter
 
 | secondes mesure | CPU du conteneur (docker stats) | temps moyen de réponse (seconde)

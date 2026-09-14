@@ -7,6 +7,11 @@ DB_NAME=$(grep "DB_NAME" /var/www/html/wp-config.php | sed -E "s/.*'([^']+)'.*/\
 DB_USER=$(grep "DB_USER" /var/www/html/wp-config.php | sed -E "s/.*'([^']+)'.*/\1/")
 DB_PASSWORD=$(grep "DB_PASSWORD" /var/www/html/wp-config.php | sed -E "s/.*'([^']+)'.*/\1/")
 
+chown -R mysql:mysql /var/lib/mysql
+if [ ! -d "/var/lib/mysql/mysql" ]; then
+    mariadb-install-db --user=mysql --datadir=/var/lib/mysql
+fi
+
 # 1. Démarrer MariaDB en arrière-plan
 service mariadb start
 
@@ -35,6 +40,9 @@ if [ ! -f "$cheminFichierTemoin" ]; then
 
     touch "$cheminFichierTemoin"
 fi
+
+# Donner à WordPress les droits d'écriture sur les uploads 
+chown -R www-data:www-data /var/www/html/wp-content/uploads
 
 # 4. Apache en avant-plan = PID 1 du conteneur
 exec apache2-foreground

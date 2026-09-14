@@ -11,13 +11,13 @@ RUN apt-get update \
     && sed -ri 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+    
+# Préparer le dossier de données MariaDB
+RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
 
 # Script de démarrage
 COPY demarrer-services.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/demarrer-services.sh
-
-# Préparer le dossier de données MariaDB
-RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
 
 # Base de données et fichiers wordpress
 COPY fichiers-wordpress/ /var/www/html/

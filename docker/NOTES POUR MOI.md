@@ -10,6 +10,7 @@ Running it :
 - `docker run --name boutique-cornucopia -p "8080:80" boutique-cornucopia:1.0`
   
 - http://localhost:8080/
+- http://localhost:8080/adminer.php
 
 Vérifier si déjà en train de run :
 - `docker ps`
