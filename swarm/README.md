@@ -9,3 +9,11 @@ cat arreter.sh
 echo "================ DOCKERFILE =============="
 cat Dockerfile
 ```
+
+
+docker network ls
+
+
+Voir les 5 noeuds
+
+http://192.168.56.10:5000

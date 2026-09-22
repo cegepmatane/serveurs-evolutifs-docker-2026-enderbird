@@ -101,4 +101,16 @@ docker exec swarm-node01 \
   --compose-file=/home/docker/swarm/wordpress-sticky.yml \
   wordpress-sticky
 
-  
+# ==========================================
+# Étape 06 - Déployer le visualiseur
+# ==========================================
+
+docker exec swarm-node01 \
+  docker service create \
+  --name=viz \
+  --publish=5000:8080/tcp \
+  --constraint=node.role==manager \
+  --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+  dockersamples/visualizer
+
+echo "FININIIIIIII!!!!!!!!"
