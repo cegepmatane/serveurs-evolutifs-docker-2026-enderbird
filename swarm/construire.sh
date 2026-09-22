@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# ACCÉDER AU DOCKER
-# docker exec -it swarm-node01 sh
+# Étape 01 dans démarrer.sh
+
+# ==========================================
+# Étape 02 - Les Jetons
+# ==========================================
 
 # Initialiser le Swarm sur le premier gestionnaire
 docker exec swarm-node01 \
@@ -84,3 +87,18 @@ FIN
     mkdir -p /home/docker/swarm/database &&
     ls -1 /home/docker/swarm
 '
+
+# ==========================================
+# Étape 05 - Déployer la pile WordPress
+# ==========================================
+
+# Copier la pile sur le gestionnaire
+docker cp wordpress-sticky.yml swarm-node01:/home/docker/swarm/wordpress-sticky.yml
+
+# Déployer la pile depuis swarm-node01
+docker exec swarm-node01 \
+  docker stack deploy \
+  --compose-file=/home/docker/swarm/wordpress-sticky.yml \
+  wordpress-sticky
+
+  

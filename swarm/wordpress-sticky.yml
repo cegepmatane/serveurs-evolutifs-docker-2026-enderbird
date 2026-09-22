@@ -1,0 +1,65 @@
+# Laboratoire Swarm (version Docker-in-Docker) - pile Cornucopia (etape 05 du guide)
+# Preparation prealable (etape 04), dans les noeuds swarm-node04 ET swarm-node05 :
+#   sauvegarde-cornucopia-formation.zip deballe dans /home/docker/swarm/sauvegarde/,
+#   chown -R 33:33 sur fichiers-wordpress, wp-config.php ajuste (DB_HOST db:3306);
+#   swarm-node04 seulement : les trois requetes de repointage a la fin de base-de-donnees.sql
+# S'ecrit sur votre Linux dans ~/swarm, voyage vers le noeud, se deploie depuis swarm-node01 :
+#   docker cp wordpress-sticky.yml swarm-node01:/home/docker/swarm/wordpress-sticky.yml
+#   docker exec -it swarm-node01 sh
+#   docker stack deploy --compose-file=/home/docker/swarm/wordpress-sticky.yml wordpress-sticky
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 100
+        delay: 3s
+      placement:
+        constraints: [node.hostname == swarm-node04]
+    volumes:
+      - /home/docker/swarm/database:/var/lib/mysql
+      - /home/docker/swarm/sauvegarde/base-de-donnees.sql:/docker-entrypoint-initdb.d/base-de-donnees.sql
+    networks:
+      - net
+    environment:
+      MYSQL_ROOT_PASSWORD: racine-potager-2026
+      MYSQL_DATABASE: cornucopia
+      MYSQL_USER: flora
+      MYSQL_PASSWORD: potager-2026
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:7.1
+    deploy:
+      mode: replicated
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        max_attempts: 10
+        delay: 15s
+      placement:
+        constraints: [node.role == worker]
+      update_config:
+        delay: 2s
+      labels:
+        - "traefik.docker.network=net"
+        - "traefik.port=80"
+        - "traefik.frontend.rule=PathPrefix:/"
+        - "traefik.backend.loadbalancer.sticky=true"
+    # Pas de variables WORDPRESS_* : le wp-config.php de la sauvegarde est
+    # monté avec les fichiers du site, l'image ne le remplace jamais.
+    volumes:
+      - /home/docker/swarm/sauvegarde/fichiers-wordpress:/var/www/html
+    networks:
+      - net
+    ports:
+      - "80"
+
+networks:
+  net:
+    external: true
