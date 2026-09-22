@@ -23,6 +23,8 @@
 #node02 + node03 = managers
 #node04 + node05 = workers
 
+
+
 docker network create --subnet 192.168.56.0/24 reseau-swarm
 
 docker run -d --privileged \
