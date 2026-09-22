@@ -23,8 +23,6 @@
 #node02 + node03 = managers
 #node04 + node05 = workers
 
-
-
 docker network create --subnet 192.168.56.0/24 reseau-swarm
 
 docker run -d --privileged \
@@ -71,3 +69,6 @@ docker run -d --privileged \
   -e DOCKER_TLS_CERTDIR="" \
   -e DOCKER_MIN_API_VERSION=1.24 \
   docker:dind
+
+
+echo "ATTENDRE UN 30 SECONDES AVANT D'EXÉCUTER LE SCRIPT construire.sh"
