@@ -6,3 +6,13 @@
 #    ├── préparer sauvegarde WordPress
 #    ├── préparer MySQL
 #    └── déployer wordpress-sticky.yml
+
+#réseau overlay net
+#        ↓
+#Traefik
+#        ↓
+#préparation sauvegarde
+#        ↓
+#WordPress + MySQL
+#        ↓
+#Visualiseur
