@@ -8,6 +8,9 @@ http://localhost:8082/
 phpmyadmin
 http://localhost:8083/
 
+workpress
+http://localhost:8082/wp-admin/
+
 
 ### (STARTER)
 docker compose up -d

@@ -17,7 +17,12 @@ docker network ls
 Voir les 5 noeuds
 
 http://192.168.56.10:5000
+http://192.168.56.10/
+http://192.168.56.10:9090/dashboard/
+http://192.168.56.10/wp-admin/
 
+UTILISATEUR: flora
+PASSWORD: cornucopia-2026
 
 
 cedri@PORTABLE-CED-LINUX:~/DOCKERPROJETS/serveurs-evolutifs-docker-2026-enderbird/swarm$ docker exec swarm-node01 docker service ls
