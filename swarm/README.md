@@ -1,18 +1,19 @@
-```bash
-cat construire.sh
-echo "================ DEMARRER ================"
-cat demarrer.sh
-echo "============= SERVICES ==================="
-cat demarrer-services.sh
-echo "================ ARRETER ================="
-cat arreter.sh
-echo "================ DOCKERFILE =============="
-cat Dockerfile
-```
+PREMIERE FOIS:
+demarrer.sh
+construire.sh
+
+arreter.sh (garder données)
+detruire.sh (tout supprimer)
+
+DEUXIEME FOIS FOIS:
+demarrer.sh
+demarrer-services.sh
+
+
+
 
 
 docker network ls
-
 
 Voir les 5 noeuds
 
